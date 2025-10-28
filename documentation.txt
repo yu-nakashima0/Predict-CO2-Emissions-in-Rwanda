@@ -2,6 +2,10 @@
 
 2. Data Exploration
 -> there were missing values
--> filled with mode
+    -> filled with interpolate(linear)
+-> outlier Detection
+    -> IsolationForest
 
-3.
+
+3. Data Visualization 
+- Boxplot with streamlit

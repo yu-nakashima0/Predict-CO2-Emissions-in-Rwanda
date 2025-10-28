@@ -1,4 +1,11 @@
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.ensemble import IsolationForest
+from scipy import stats
+import streamlit as st
+
 
 
 #read data
@@ -28,7 +35,7 @@ list_of_MS = check_missing_percentage(df)
 
 
 """
-fill missing values in a column with the mode of that column
+fill missing values in a column with the interpolate of that column
 retrun : dataframe with missing values filled
 """
 def fill_missing_with_interpolate(df, columns):
@@ -38,7 +45,52 @@ def fill_missing_with_interpolate(df, columns):
 
 df = fill_missing_with_interpolate(df, list_of_MS)
 
-print(df.isnull().sum())
+#print(df.isnull().sum())
 
 #check for duplicates
 #print(df.duplicated().sum())
+
+
+"""
+group features by pollutant type
+return : dictionary with feature groups
+"""
+def group_features_by_pollutant(df):
+    feature_groups = {}
+    pollutants = ["SulphurDioxide", "CarbonMonoxide", "NitrogenDioxide", "Formaldehyde", "Ozone", "UvAerosol", "Cloud"]
+    for pollutant in pollutants:
+        feature_groups[pollutant] = [col for col in df.columns if pollutant in col]
+    return feature_groups
+
+feature_groups = group_features_by_pollutant(df)
+"""
+detect outliers in a column 
+return : dataframe with outliers marked
+"""
+def detect_outliers(df, feature_groups):
+    for group_name, cols in feature_groups.items():
+        iso = IsolationForest(n_estimators=100, contamination=0.05, random_state=42)
+        X = df[cols]
+        df[f"{group_name}_outlier"] = iso.fit_predict(X)
+    return df
+
+df = detect_outliers(df, feature_groups)
+feature_groups = group_features_by_pollutant(df)
+
+"""
+visualize boxplots for each feature group
+"""
+def visualize_boxplots(df, feature_groups):
+    st.title("Boxplots by feature group")
+    group = st.selectbox("select a group", feature_groups.keys())
+    cols = feature_groups[group]
+    st.subheader(f"Boxplots for groups: {group}")
+    for c in cols:
+        fig, ax = plt.subplots()
+        ax.boxplot(df[c].dropna())
+        ax.set_title(c)
+        st.pyplot(fig)
+
+visualize_boxplots(df, feature_groups)
+
+    

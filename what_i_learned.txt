@@ -3,16 +3,36 @@ Missing Values:
         df[i].fillna(df[i].mean())
         df[i].fillna(df[i].median())
         df[i].fillna(df[i].mode())
-        Advantages: Simple
-        Disadvantages: Inaccuracy
+        +Advantages: Simple
+        -Disadvantages: Inaccuracy
     -Forward and Backward Fill(It replaces missing values with the last observed non-missing value in the column):
         df[i].fillna(method='ffill')
         df[i].fillna(method='bfill')
-        Advantages: Simple and Intuitive, Preserves Patterns
-        Disadvantages: Assumption of Closeness, Potential Inaccuracy
+        +Advantages: Simple and Intuitive, Preserves Patterns
+        -Disadvantages: Assumption of Closeness, Potential Inaccuracy
     -Interpolation Techniques(estimate missing values based on the values of surrounding data points.):
         df[i].interpolate(method='linear')
         df[i].interpolate(method='quadratic')
-        Advantages: Preserves Data Relationships
-        Disadvantages: Complexity, Assumptions on Data may not always be true
-        
+        +Advantages: Preserves Data Relationships
+        -Disadvantages: Complexity, Assumptions on Data may not always be true
+
+
+Outliers Detection:
+    -Z-Score Method(detects outliers based on how far a data point is from the mean, measured in terms of standard deviations.):
+        z_scores = np.abs(stats.zscore(df))
+        outliers_z = np.where(z_scores > 3)
+        +Pros: Simple, fast, works well with normally distributed data.
+        -Cons: Not reliable for skewed or non-normal distributions.
+    -IQR Method (Interquartile Range) (Any value that falls below Q1 − 1.5 × IQR or above Q3 + 1.5 × IQR is considered an outlier.):
+        Q1 = df.quantile(0.25)
+        Q3 = df.quantile(0.75)
+        IQR = Q3 - Q1
+        outliers_iqr = ((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR)))
+        +Pros: Robust to non-normal data, less influenced by extreme values.
+        -Cons: Doesn’t adapt well to very skewed distributions.
+    -Isolation Forest(Randomly select features and split values.Construct isolation trees. Compute average path length for each point. Shorter path = more likely outlier.):
+        +Pros: Works well in high dimensions, efficient.
+        -Cons: Requires choosing contamination
+    -Local Outlier Factor (LOF) (If a point has significantly lower density than its neighbors, it is flagged as an outlier.):
+        +Pros: Works well with clusters of varying density.
+        -Cons: Sensitive to choice of k (neighbors).
