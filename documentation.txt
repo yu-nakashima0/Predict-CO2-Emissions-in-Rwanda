@@ -5,7 +5,7 @@
     -> filled with interpolate(linear)
 -> outlier Detection
     -> IsolationForest
-
+-> data normalization
 
 3. Data Visualization 
 - Boxplot with streamlit

@@ -36,3 +36,28 @@ Outliers Detection:
     -Local Outlier Factor (LOF) (If a point has significantly lower density than its neighbors, it is flagged as an outlier.):
         +Pros: Works well with clusters of varying density.
         -Cons: Sensitive to choice of k (neighbors).
+
+
+Normalization and Standardization:
+    Normalization(Scales values between [0, 1] or [-1, 1]):
+        MinMaxScaler
+        +Pros: useful when we don't know about the distribution
+    Standardardization(not bounded to a certain range):
+        StandardScaler
+        +Pros: useful when the feature distribution is Normal or Gaussian
+
+
+Handling Skewed Distribution:
+    Logarithmic Transformation:
+        when the data feature is right skewed or positively skewed
+    Square Root Transformation:
+        usually used in moderately right skewed data,
+    Box-Cox Transformation:
+        more suitable for right skewed data with data points either being positive or zero valued.
+    Yeo-Johnson Transformation:
+        it can work for both right as well as left skewed data feature, 
+        it can also work for either positive or negative value, which the box-cox transformation lacks.
+    Qunatile Transformation:
+        works both for right skewed as well as left skewed data variable.
+
+

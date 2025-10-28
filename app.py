@@ -5,7 +5,7 @@ import seaborn as sns
 from sklearn.ensemble import IsolationForest
 from scipy import stats
 import streamlit as st
-
+from sklearn.preprocessing import PowerTransformer
 
 
 #read data
@@ -63,6 +63,8 @@ def group_features_by_pollutant(df):
     return feature_groups
 
 feature_groups = group_features_by_pollutant(df)
+
+
 """
 detect outliers in a column 
 return : dataframe with outliers marked
@@ -80,9 +82,9 @@ feature_groups = group_features_by_pollutant(df)
 """
 visualize boxplots for each feature group
 """
-def visualize_boxplots(df, feature_groups):
+def visualize_boxplots(df, feature_groups, unique_key):
     st.title("Boxplots by feature group")
-    group = st.selectbox("select a group", feature_groups.keys())
+    group = st.selectbox("select a group", feature_groups.keys(), key=unique_key)
     cols = feature_groups[group]
     st.subheader(f"Boxplots for groups: {group}")
     for c in cols:
@@ -91,6 +93,39 @@ def visualize_boxplots(df, feature_groups):
         ax.set_title(c)
         st.pyplot(fig)
 
-visualize_boxplots(df, feature_groups)
+visualize_boxplots(df, feature_groups, key="before_processing_boxplots")
 
     
+"""
+Handling Skewed Distribution
+return: dataframe with transformed data
+"""
+def handle_skewed_distribution(df, feature_groups):
+    for group_name, cols in feature_groups.items():
+        for col in cols:
+            skewness = df[col].skew()
+            if abs(skewness) > 1:
+                pt = PowerTransformer(method='yeo-johnson')
+                df[col] = pt.fit_transform(df[[col]])
+    return df
+
+#df = handle_skewed_distribution(df, feature_groups)
+
+"""
+normalize data
+return: dataframe with normalized data
+"""
+def normalize_data(df, feature_groups):
+    for group_name, cols in feature_groups.items():
+        for col in cols:
+            min_val = df[col].min()
+            max_val = df[col].max()
+            df[col] = (df[col] - min_val) / (max_val - min_val)
+    return df
+
+df = normalize_data(df, feature_groups)
+
+
+#check data after data processing
+visualize_boxplots(df, feature_groups, key="after_processing_boxplots") 
+
