@@ -1,0 +1,18 @@
+Missing Values:
+    -Mean, Median and Mode Imputation:
+        df[i].fillna(df[i].mean())
+        df[i].fillna(df[i].median())
+        df[i].fillna(df[i].mode())
+        Advantages: Simple
+        Disadvantages: Inaccuracy
+    -Forward and Backward Fill(It replaces missing values with the last observed non-missing value in the column):
+        df[i].fillna(method='ffill')
+        df[i].fillna(method='bfill')
+        Advantages: Simple and Intuitive, Preserves Patterns
+        Disadvantages: Assumption of Closeness, Potential Inaccuracy
+    -Interpolation Techniques(estimate missing values based on the values of surrounding data points.):
+        df[i].interpolate(method='linear')
+        df[i].interpolate(method='quadratic')
+        Advantages: Preserves Data Relationships
+        Disadvantages: Complexity, Assumptions on Data may not always be true
+        
