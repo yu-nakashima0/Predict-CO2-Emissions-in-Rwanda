@@ -121,7 +121,7 @@ This project aims to build machine learning models that use open-source CO₂ em
 1. Data Collection<br>
 
 2. Data Exploration/Processing<br>
--> missing values . filled with interpolate(linear)<br>
+-> missing values : filled with interpolate(linear)<br>
 -> outlier Detection : IsolationForest<br>
 -> data normalization<br>
 -> Handling Skewed Distribution<br>
@@ -138,8 +138,18 @@ This project aims to build machine learning models that use open-source CO₂ em
 - (Feature Elimination)<br>
 
 5. Modeling <br>
-- 
-- 
+- neural network<br>
+- in progress<br>
+
+6. Hyperparameter-Tuning<br>
+
+
+7. Pipeline<br>
+
+
+8. Presentation <br>
+
+
 <br>
 
 

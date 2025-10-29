@@ -25,3 +25,12 @@
 - 1. neural network
     MAE  : 0.0223
     RMSE: 0.04049571509371439
+
+
+6. Hyperparameter-Tuning
+
+
+7. Pipeline
+
+
+8. Presentation

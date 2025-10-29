@@ -268,13 +268,90 @@ def neural_network_model(X_train, y_train, X_val, y_val):
     y_pred = model.predict(X_val)
     rmse = np.sqrt(mse)
   
-    print(f"MAE  : {mae:.4f}")
+    print(f"MAE  : {mae:.4f}") 
     print(f"Validation RMSE: {rmse}")
 
-    return model,history
+    return model,history, mse, mae, rmse
 
 
-model, history = neural_network_model(X_train, y_train, X_val, y_val)
+model,history, mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
 
 
+"""
+visualize training history
+"""
+def visualize_training_history_plotly(history, log_scale=False, start_epoch=0):
+    st.title("Neural Network Training History (Plotly)")
+    epochs = np.arange(start_epoch, len(history.history['loss'])) + 1
 
+    # Loss
+    fig_loss = go.Figure()
+    fig_loss.add_trace(go.Scatter(
+        x=epochs,
+        y=history.history['loss'][start_epoch:],
+        mode='lines+markers',
+        name='Train Loss'
+    ))
+    fig_loss.add_trace(go.Scatter(
+        x=epochs,
+        y=history.history['val_loss'][start_epoch:],
+        mode='lines+markers',
+        name='Validation Loss'
+    ))
+    fig_loss.update_layout(
+        title="Model Loss",
+        xaxis_title="Epoch",
+        yaxis_title="Loss"
+    )
+    if log_scale:
+        fig_loss.update_yaxes(type="log")
+    st.plotly_chart(fig_loss, use_container_width=True)
+
+    # MAE
+    fig_mae = go.Figure()
+    fig_mae.add_trace(go.Scatter(
+        x=epochs,
+        y=history.history['mae'][start_epoch:],
+        mode='lines+markers',
+        name='Train MAE'
+    ))
+    fig_mae.add_trace(go.Scatter(
+        x=epochs,
+        y=history.history['val_mae'][start_epoch:],
+        mode='lines+markers',
+        name='Validation MAE'
+    ))
+    fig_mae.update_layout(
+        title="Model MAE",
+        xaxis_title="Epoch",
+        yaxis_title="MAE"
+    )
+    st.plotly_chart(fig_mae, use_container_width=True)
+
+    # RMSE
+    train_rmse = np.sqrt(history.history['loss'][start_epoch:])
+    val_rmse = np.sqrt(history.history['val_loss'][start_epoch:])
+    fig_rmse = go.Figure()
+    fig_rmse.add_trace(go.Scatter(
+        x=epochs,
+        y=train_rmse,
+        mode='lines+markers',
+        name='Train RMSE'
+    ))
+    fig_rmse.add_trace(go.Scatter(
+        x=epochs,
+        y=val_rmse,
+        mode='lines+markers',
+        name='Validation RMSE'
+    ))
+    fig_rmse.update_layout(
+        title="Model RMSE",
+        xaxis_title="Epoch",
+        yaxis_title="RMSE"
+    )
+    if log_scale:
+        fig_rmse.update_yaxes(type="log")
+    st.plotly_chart(fig_rmse, use_container_width=True)
+
+
+visualize_training_history_plotly(history, log_scale=True, start_epoch=5)

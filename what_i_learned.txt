@@ -99,9 +99,12 @@ Feature Extraction:
 
 Keras:
     1.define model:
-    
     2.compile model:
-
     3.fit model:
-
     4.evaluate model:
+
+Evaluation:
+    Train Loss:
+        How well the model learned the training data
+    Validation Loss: 
+        How well the model can generalize to new, unseen data
