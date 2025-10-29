@@ -1,4 +1,12 @@
-#### used libraries: 
+#### 🗺️ Predicting CO2 Emissions:
+Accurately tracking carbon emissions is a vital foundation for addressing climate change.<br>
+<br>
+This challenge aims to build machine learning models that use open-source CO₂ emission data collected by the Sentinel-5P satellite to forecast future carbon output.<br>
+<br>
+
+
+
+#### 📚 used libraries: 
 -pandas<br>
 -matplotlib<br>
 -skit-learn<br>
@@ -6,8 +14,10 @@
 -streamlit<br>
 -plotly<br>
 
-#### features:
--**basic information:**
+
+
+#### ✨ features of original dataset:
+-**basic information:**<br>
         -ID_LAT_LON_YEAR_WEEK<br>
         -latitude<br>
         -longitude<br>
@@ -105,5 +115,29 @@
 
 
 
-#### start Programm: 
+#### ✏️ methods: 
+1. Data Collection<br>
+
+2. Data Exploration/Processing<br>
+-> there were missing values<br>
+    -> filled with interpolate(linear)<br>
+-> outlier Detection<br>
+    -> IsolationForest<br>
+-> data normalization<br>
+-> Handling Skewed Distribution<br>
+
+3. Data Visualization(streamlit/plotly)<br>
+- Boxplot <br>
+- Correlation <br>
+- Feature importance<br>
+- mutual information<br>
+- interactive<br>
+
+4. Feature Engineering<br>
+-
+
+
+
+
+#### 🎉 start programm: 
 python -m streamlit run app.py
