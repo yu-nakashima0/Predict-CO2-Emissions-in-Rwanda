@@ -7,7 +7,8 @@ from scipy import stats
 import streamlit as st
 from sklearn.preprocessing import PowerTransformer
 from sklearn.feature_selection import mutual_info_regression
-    
+import plotly.express as px
+import plotly.graph_objects as go
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -164,6 +165,59 @@ def visualize_additional_insights(df, feature_groups):
     mi_series.plot(kind='bar', ax=ax)
     st.pyplot(fig)
 
-
 visualize_additional_insights(df, feature_groups)
 
+
+def visualize_additional_insights_with_plotly(df, feature_groups):
+    st.title("Additional Insights (Plotly Interactive)")
+
+    group = st.selectbox("select a group for insights", feature_groups.keys(), key="additional_insights_plotly")
+    cols = feature_groups[group]
+
+    # ------------------- 1. Correlation Heatmap -------------------
+    st.subheader(f"📌 Correlation Heatmap ({group})")
+    corr = df[cols].corr()
+
+    fig_corr = px.imshow(
+        corr,
+        x=corr.columns,
+        y=corr.columns,
+        color_continuous_scale="RdBu",
+        origin="lower",
+        title=f"Correlation Heatmap: {group}"
+    )
+    st.plotly_chart(fig_corr, use_container_width=True)
+
+    # ------------------- 2. Feature Importance (Z-score) -------------------
+    st.subheader(f"📌 Feature Importance (Z-score) ({group})")
+    z_scores = abs(stats.zscore(df[cols]))
+    feature_importance = pd.Series(z_scores.mean(axis=0), index=cols).sort_values(ascending=False)
+
+    fig_zscore = px.bar(
+        feature_importance,
+        x=feature_importance.index,
+        y=feature_importance.values,
+        labels={"x": "Feature", "y": "Z-score"},
+        title="Z-score Based Feature Importance"
+    )
+    st.plotly_chart(fig_zscore, use_container_width=True)
+
+    # ------------------- 3. Mutual Information -------------------
+    st.subheader(f"📌 Mutual Information ({group})")
+    X = df[cols].drop(columns=['emission'], errors="ignore")
+    y = df['emission']
+
+    mi = mutual_info_regression(X, y)
+    mi_series = pd.Series(mi, index=X.columns).sort_values(ascending=False)
+
+    fig_mi = px.bar(
+        mi_series,
+        x=mi_series.index,
+        y=mi_series.values,
+        labels={"x": "Feature", "y": "Mutual Information"},
+        title="Mutual Information Scores"
+    )
+    st.plotly_chart(fig_mi, use_container_width=True)
+
+
+visualize_additional_insights_with_plotly(df, feature_groups)

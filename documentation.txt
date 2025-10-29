@@ -9,7 +9,7 @@
 -> Handling Skewed Distribution
 
 
-3. Data Visualization(streamlit)
+3. Data Visualization(streamlit/plotly)
 - Boxplot 
 - Correlation 
 - Feature importance
