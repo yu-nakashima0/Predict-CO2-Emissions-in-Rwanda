@@ -1,3 +1,109 @@
-used libraries: 
-        pandas, matplotlib, skit-learn, scipy, streamlit, plotly 
+#### used libraries: 
+-pandas
+-matplotlib
+-skit-learn
+-scipy
+-streamlit
+-plotly
 
+#### features:
+-**basic information**
+        -ID_LAT_LON_YEAR_WEEK
+        -latitude
+        -longitude
+        -year
+        -week_no
+
+-**SulphurDioxide**
+        -SulphurDioxide_SO2_column_number_density
+        -SulphurDioxide_SO2_column_number_density_amf
+        -SulphurDioxide_SO2_slant_column_number_density
+        -SulphurDioxide_cloud_fraction
+        -SulphurDioxide_sensor_azimuth_angle
+        -SulphurDioxide_sensor_zenith_angle
+        -SulphurDioxide_solar_azimuth_angle
+        -SulphurDioxide_solar_zenith_angle
+        -SulphurDioxide_SO2_column_number_density_15km
+
+-**CarbonMonoxide**
+        -CarbonMonoxide_CO_column_number_density
+        -CarbonMonoxide_H2O_column_number_density
+        -CarbonMonoxide_cloud_height
+        -CarbonMonoxide_sensor_altitude
+        -CarbonMonoxide_sensor_azimuth_angle
+        -CarbonMonoxide_sensor_zenith_angle
+        -CarbonMonoxide_solar_azimuth_angle
+        -CarbonMonoxide_solar_zenith_angle
+
+-**NitrogenDioxide**
+        -NitrogenDioxide_NO2_column_number_density
+        -NitrogenDioxide_tropospheric_NO2_column_number_density
+        -NitrogenDioxide_stratospheric_NO2_column_number_density
+        -NitrogenDioxide_NO2_slant_column_number_density
+        -NitrogenDioxide_tropopause_pressure
+        -NitrogenDioxide_absorbing_aerosol_index
+        -NitrogenDioxide_cloud_fraction
+        -NitrogenDioxide_sensor_altitude
+        -NitrogenDioxide_sensor_azimuth_angle
+        -NitrogenDioxide_sensor_zenith_angle
+        -NitrogenDioxide_solar_azimuth_angle
+        -NitrogenDioxide_solar_zenith_angle
+
+-**Formaldehyde**
+        -Formaldehyde_tropospheric_HCHO_column_number_density
+        -Formaldehyde_tropospheric_HCHO_column_number_density_amf
+        -Formaldehyde_HCHO_slant_column_number_density
+        -Formaldehyde_cloud_fraction
+        -Formaldehyde_solar_zenith_angle
+        -Formaldehyde_solar_azimuth_angle
+        -Formaldehyde_sensor_zenith_angle
+        -Formaldehyde_sensor_azimuth_angle
+
+-**UvAerosolIndex**
+        -UvAerosolIndex_absorbing_aerosol_index
+        -UvAerosolIndex_sensor_altitude
+        -UvAerosolIndex_sensor_azimuth_angle
+        -UvAerosolIndex_sensor_zenith_angle
+        -UvAerosolIndex_solar_azimuth_angle
+        -UvAerosolIndex_solar_zenith_angle
+
+-**Ozone**
+        -Ozone_O3_column_number_density
+        -Ozone_O3_column_number_density_amf
+        -Ozone_O3_slant_column_number_density
+        -Ozone_O3_effective_temperature
+        -Ozone_cloud_fraction
+        -Ozone_sensor_azimuth_angle
+        -Ozone_sensor_zenith_angle
+        -Ozone_solar_azimuth_angle
+        -Ozone_solar_zenith_angle
+
+-**UvAerosolLayerHeight**
+        -UvAerosolLayerHeight_aerosol_height
+        -UvAerosolLayerHeight_aerosol_pressure
+        -UvAerosolLayerHeight_aerosol_optical_depth
+        -UvAerosolLayerHeight_sensor_zenith_angle
+        -UvAerosolLayerHeight_sensor_azimuth_angle
+        -UvAerosolLayerHeight_solar_azimuth_angle
+        -UvAerosolLayerHeight_solar_zenith_angle
+
+-**Cloud**
+        -Cloud_cloud_fraction
+        -Cloud_cloud_top_pressure
+        -Cloud_cloud_top_height
+        -Cloud_cloud_base_pressure
+        -Cloud_cloud_base_height
+        -Cloud_cloud_optical_depth
+        -Cloud_surface_albedo
+        -Cloud_sensor_azimuth_angle
+        -Cloud_sensor_zenith_angle
+        -Cloud_solar_azimuth_angle
+        -Cloud_solar_zenith_angle
+
+-**Target**
+        -emission
+
+
+
+#### start Programm: 
+python -m streamlit run app.py
