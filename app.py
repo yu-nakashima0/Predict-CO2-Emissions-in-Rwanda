@@ -6,7 +6,8 @@ from sklearn.ensemble import IsolationForest
 from scipy import stats
 import streamlit as st
 from sklearn.preprocessing import PowerTransformer
-
+from sklearn.feature_selection import mutual_info_regression
+    
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -151,6 +152,16 @@ def visualize_additional_insights(df, feature_groups):
     feature_importance = pd.Series(z_scores.mean(axis=0), index=cols).sort_values(ascending=False)
     fig, ax = plt.subplots()
     feature_importance.plot(kind='bar', ax=ax)
+    st.pyplot(fig)
+
+    # mutual information 
+    st.subheader(f"Mutual Information for {group}")
+    X = df[cols].drop(columns=['emission'])
+    y = df['emission']
+    mi = mutual_info_regression(X, y)
+    mi_series = pd.Series(mi, index=X.columns).sort_values(ascending=False)
+    fig, ax = plt.subplots()
+    mi_series.plot(kind='bar', ax=ax)
     st.pyplot(fig)
 
 
