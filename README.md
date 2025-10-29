@@ -138,17 +138,8 @@ This project aims to build machine learning models that use open-source CO₂ em
 - (Feature Elimination)<br>
 
 5. Modeling <br>
-- neural network<br>
-- in progress<br>
-
-6. Hyperparameter-Tuning<br>
-
-
-7. Pipeline<br>
-
-
-8. Presentation <br>
-
+in progress<br>
+<br>
 
 <br>
 
