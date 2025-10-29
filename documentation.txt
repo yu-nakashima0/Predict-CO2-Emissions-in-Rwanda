@@ -1,11 +1,15 @@
 1. Data Collection
 
-2. Data Exploration
+2. Data Exploration/Processing
 -> there were missing values
     -> filled with interpolate(linear)
 -> outlier Detection
     -> IsolationForest
 -> data normalization
+-> Handling Skewed Distribution
 
-3. Data Visualization 
-- Boxplot with streamlit
+
+3. Data Visualization(streamlit)
+- Boxplot 
+- Correlation 
+- Feature importance

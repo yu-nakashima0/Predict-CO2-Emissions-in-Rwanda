@@ -59,7 +59,7 @@ def group_features_by_pollutant(df):
     feature_groups = {}
     pollutants = ["SulphurDioxide", "CarbonMonoxide", "NitrogenDioxide", "Formaldehyde", "Ozone", "UvAerosol", "Cloud"]
     for pollutant in pollutants:
-        feature_groups[pollutant] = [col for col in df.columns if pollutant in col]
+        feature_groups[pollutant] = [col for col in df.columns if (pollutant in col or col == 'emission')]
     return feature_groups
 
 feature_groups = group_features_by_pollutant(df)
@@ -93,7 +93,7 @@ def visualize_boxplots(df, feature_groups, unique_key):
         ax.set_title(c)
         st.pyplot(fig)
 
-visualize_boxplots(df, feature_groups, key="before_processing_boxplots")
+visualize_boxplots(df, feature_groups, "before_processing_boxplots")
 
     
 """
@@ -127,5 +127,32 @@ df = normalize_data(df, feature_groups)
 
 
 #check data after data processing
-visualize_boxplots(df, feature_groups, key="after_processing_boxplots") 
+visualize_boxplots(df, feature_groups, "after_processing_boxplots") 
+
+
+"""
+visualize correlation, feature importance and mutual information 
+"""
+def visualize_additional_insights(df, feature_groups):
+    st.title("Additional Insights")
+    group = st.selectbox("select a group for insights", feature_groups.keys(), key="additional_insights")
+    cols = feature_groups[group]
+    
+    # Correlation Heatmap
+    st.subheader(f"Correlation Heatmap for {group}")
+    corr = df[cols].corr()
+    fig, ax = plt.subplots()
+    sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+    st.pyplot(fig)
+    
+    # Feature Importance using Z-score
+    st.subheader(f"Feature Importance (Z-score) for {group}")
+    z_scores = np.abs(stats.zscore(df[cols]))
+    feature_importance = pd.Series(z_scores.mean(axis=0), index=cols).sort_values(ascending=False)
+    fig, ax = plt.subplots()
+    feature_importance.plot(kind='bar', ax=ax)
+    st.pyplot(fig)
+
+
+visualize_additional_insights(df, feature_groups)
 
