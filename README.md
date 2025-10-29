@@ -138,8 +138,7 @@ This project aims to build machine learning models that use open-source CO₂ em
 - (Feature Elimination)<br>
 
 5. Modeling <br>
-- 
-- 
+in progress<br>
 <br>
 
 
