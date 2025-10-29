@@ -1,3 +1,5 @@
+{create virtual workplace with venv(Python 3.10)}
+
 1. Data Collection
 
 2. Data Exploration/Processing
@@ -13,3 +15,13 @@
 - Boxplot 
 - Correlation 
 - Feature importance
+- mutual information
+
+4. Feature engineering
+-
+-
+
+5. Modeling
+- 1. neural network
+    MAE  : 0.0223
+    RMSE: 0.04049571509371439

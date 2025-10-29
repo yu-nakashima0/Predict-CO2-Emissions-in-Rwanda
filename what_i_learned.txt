@@ -76,3 +76,32 @@ Feature Importance:
     Which features the model actually prioritized
     also non-linear
     depending on the model
+
+
+Feature Creation:
+    Domain-specific: 
+        Created based on industry knowledge like business rules.
+    Data-driven: 
+        Derived by recognizing patterns in data.
+    Synthetic: 
+        Formed by combining existing features.
+    Binning: 
+        Convert continuous variables into categories
+
+Feature Extraction:
+    PCA:
+        Combine correlations into one axis
+    Aggregation:
+        Group and take average/sum
+    Combination:
+        Addition/Subtraction/Ratio
+
+
+Keras:
+    1.define model:
+    
+    2.compile model:
+
+    3.fit model:
+
+    4.evaluate model:

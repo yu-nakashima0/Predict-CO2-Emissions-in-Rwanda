@@ -9,6 +9,11 @@ from sklearn.preprocessing import PowerTransformer
 from sklearn.feature_selection import mutual_info_regression
 import plotly.express as px
 import plotly.graph_objects as go
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+from keras.optimizers import Adam
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -174,8 +179,7 @@ def visualize_additional_insights_with_plotly(df, feature_groups):
     group = st.selectbox("select a group for insights", feature_groups.keys(), key="additional_insights_plotly")
     cols = feature_groups[group]
 
-    # ------------------- 1. Correlation Heatmap -------------------
-    st.subheader(f"📌 Correlation Heatmap ({group})")
+    st.subheader(f"Correlation Heatmap ({group})")
     corr = df[cols].corr()
 
     fig_corr = px.imshow(
@@ -188,8 +192,7 @@ def visualize_additional_insights_with_plotly(df, feature_groups):
     )
     st.plotly_chart(fig_corr, use_container_width=True)
 
-    # ------------------- 2. Feature Importance (Z-score) -------------------
-    st.subheader(f"📌 Feature Importance (Z-score) ({group})")
+    st.subheader(f"Feature Importance (Z-score) ({group})")
     z_scores = abs(stats.zscore(df[cols]))
     feature_importance = pd.Series(z_scores.mean(axis=0), index=cols).sort_values(ascending=False)
 
@@ -202,8 +205,7 @@ def visualize_additional_insights_with_plotly(df, feature_groups):
     )
     st.plotly_chart(fig_zscore, use_container_width=True)
 
-    # ------------------- 3. Mutual Information -------------------
-    st.subheader(f"📌 Mutual Information ({group})")
+    st.subheader(f"Mutual Information ({group})")
     X = df[cols].drop(columns=['emission'], errors="ignore")
     y = df['emission']
 
@@ -221,3 +223,58 @@ def visualize_additional_insights_with_plotly(df, feature_groups):
 
 
 visualize_additional_insights_with_plotly(df, feature_groups)
+
+
+"""
+split data into train and validation sets
+return : X_train, y_train, X_val, y_val
+"""
+def split_data(df, test_size=0.2):
+    y = df['emission'].astype('float32')
+    X = df.drop(['ID_LAT_LON_YEAR_WEEK','emission'], axis=1)
+    X = pd.get_dummies(X).astype('float32')
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=test_size, random_state=42)
+    
+    return X_train, X_val, y_train, y_val
+
+X_train, X_val, y_train, y_val = split_data(df, test_size=0.2)
+
+"""
+training neural network model
+return: trained model
+"""
+def neural_network_model(X_train, y_train, X_val, y_val):
+    model = Sequential([
+        Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+        Dense(32, activation='relu'),
+        Dense(1, activation='linear')
+    ])
+
+    model.compile(
+        optimizer=Adam(learning_rate=0.001),
+        loss='mean_squared_error',
+        metrics=['mae']
+    )
+
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_val, y_val),
+        epochs=100,
+        batch_size=32,
+        verbose=1
+    )
+
+    mse, mae = model.evaluate(X_val, y_val, verbose=0)
+    y_pred = model.predict(X_val)
+    rmse = np.sqrt(mse)
+  
+    print(f"MAE  : {mae:.4f}")
+    print(f"Validation RMSE: {rmse}")
+
+    return model,history
+
+
+model, history = neural_network_model(X_train, y_train, X_val, y_val)
+
+
+

@@ -1,22 +1,24 @@
-#### 🗺️ Predicting CO2 Emissions:
+## 🗺️ Predicting CO₂ Emissions:
 Accurately tracking carbon emissions is a vital foundation for addressing climate change.<br>
 <br>
-This challenge aims to build machine learning models that use open-source CO₂ emission data collected by the Sentinel-5P satellite to forecast future carbon output.<br>
+This project aims to build machine learning models that use open-source CO₂ emission data collected by the Sentinel-5P satellite to forecast future carbon output.<br>
 <br>
 
 
 
-#### 📚 used libraries: 
+## 📚 used Python libraries: 
 - pandas<br>
 - matplotlib<br>
-- skit-learn<br>
+- scikit-learn<br>
 - scipy<br>
 - streamlit<br>
 - plotly<br>
+- PyTorch<br>
+- Keras<br>
 
+<br>
 
-
-#### ✨ features of original dataset:
+## ✨ features of original dataset:
 -**basic information:**<br>
 - ID_LAT_LON_YEAR_WEEK<br>
 - latitude<br>
@@ -48,7 +50,7 @@ This challenge aims to build machine learning models that use open-source CO₂ 
 -**NitrogenDioxide:**<br>
 - NitrogenDioxide_NO2_column_number_density<br>
 - NitrogenDioxide_tropospheric_NO2_column_number_density<br>
--NitrogenDioxide_stratospheric_NO2_column_number_density<br>
+- NitrogenDioxide_stratospheric_NO2_column_number_density<br>
 - NitrogenDioxide_NO2_slant_column_number_density<br>
 - NitrogenDioxide_tropopause_pressure<br>
 - NitrogenDioxide_absorbing_aerosol_index<br>
@@ -111,18 +113,16 @@ This challenge aims to build machine learning models that use open-source CO₂ 
 - Cloud_solar_zenith_angle<br>
 
 -**Target:**<br>
-        -emission
+- emission
+<br>
 
 
-
-#### ✏️ methods: 
+## ✏️ methods: 
 1. Data Collection<br>
 
 2. Data Exploration/Processing<br>
--> there were missing values<br>
-    -> filled with interpolate(linear)<br>
--> outlier Detection<br>
-    -> IsolationForest<br>
+-> missing values . filled with interpolate(linear)<br>
+-> outlier Detection : IsolationForest<br>
 -> data normalization<br>
 -> Handling Skewed Distribution<br>
 
@@ -134,10 +134,14 @@ This challenge aims to build machine learning models that use open-source CO₂ 
 - interactive<br>
 
 4. Feature Engineering<br>
+- (Feature Creation)<br>
+- (Feature Elimination)<br>
+
+5. Modeling <br>
 - 
+- 
+<br>
 
 
-
-
-#### 🎉 start programm: 
+## 🎉 start programm: 
 python -m streamlit run app.py
