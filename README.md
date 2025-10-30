@@ -138,11 +138,14 @@ This project aims to build machine learning models that use open-source CO₂ em
 - (Feature Elimination)<br>
 
 5. Modeling <br>
+- neural network
+- k fold cross validation
+- early stopping
 in progress<br>
 <br>
 
 <br>
 
 
-## 🎉 start programm: 
+## 🎉 run the programm: 
 python -m streamlit run app.py

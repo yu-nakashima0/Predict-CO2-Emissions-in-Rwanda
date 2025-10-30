@@ -25,7 +25,11 @@
 - 1. neural network
     MAE  : 0.0223
     RMSE: 0.04049571509371439
-
+    k_fold_cross_validation:
+        Validation RMSE: 0.047614363628862684
+        Average MSE across 5 folds: 0.0021
+        Average MAE across 5 folds: 0.0232
+        Average RMSE across 5 folds: 0.0454
 
 6. Hyperparameter-Tuning
 

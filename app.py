@@ -14,6 +14,8 @@ from keras.layers import Dense, Dropout
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
+from sklearn.model_selection import KFold
+from tensorflow.keras.callbacks import EarlyStopping
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -256,12 +258,15 @@ def neural_network_model(X_train, y_train, X_val, y_val):
         metrics=['mae']
     )
 
+    early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    
     history = model.fit(
         X_train, y_train,
         validation_data=(X_val, y_val),
         epochs=100,
         batch_size=32,
-        verbose=1
+        verbose=1,
+        callbacks=[early_stop]
     )
 
     mse, mae = model.evaluate(X_val, y_val, verbose=0)
@@ -274,7 +279,7 @@ def neural_network_model(X_train, y_train, X_val, y_val):
     return model,history, mse, mae, rmse
 
 
-model,history, mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
+#model,history, mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
 
 
 """
@@ -354,4 +359,39 @@ def visualize_training_history_plotly(history, log_scale=False, start_epoch=0):
     st.plotly_chart(fig_rmse, use_container_width=True)
 
 
-visualize_training_history_plotly(history, log_scale=True, start_epoch=5)
+#visualize_training_history_plotly(history, log_scale=True, start_epoch=5)
+
+
+"""
+k-fold cross validation
+return: average mse, mae, rmse across folds
+"""
+def k_fold_cross_validation(df, k):
+    y = df['emission'].astype('float32')
+    X = df.drop(['ID_LAT_LON_YEAR_WEEK','emission'], axis=1)
+    X = pd.get_dummies(X).astype('float32')
+
+    kf = KFold(n_splits=k, shuffle=True, random_state=42)
+    mse_list, mae_list, rmse_list = [], [], []
+
+    for train_index, val_index in kf.split(X):
+        X_train, X_val = X.iloc[train_index], X.iloc[val_index]
+        y_train, y_val = y.iloc[train_index], y.iloc[val_index]
+
+        model, history , mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
+        mse_list.append(mse)
+        mae_list.append(mae)
+        rmse_list.append(rmse)
+
+    avg_mse = np.mean(mse_list)
+    avg_mae = np.mean(mae_list)
+    avg_rmse = np.mean(rmse_list)
+
+    print(f"Average MSE across {k} folds: {avg_mse:.4f}")
+    print(f"Average MAE across {k} folds: {avg_mae:.4f}")
+    print(f"Average RMSE across {k} folds: {avg_rmse:.4f}")
+
+    return avg_mse, avg_mae, avg_rmse
+
+k_fold_cross_validation(df, 5)
+
