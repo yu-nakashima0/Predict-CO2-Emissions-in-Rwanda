@@ -15,6 +15,9 @@ This project aims to build machine learning models that use open-source CO₂ em
 - plotly<br>
 - PyTorch<br>
 - Keras<br>
+- TensorFlow<br>
+- keras_tuner<br>
+- optuna<br>
 
 <br>
 
@@ -138,10 +141,11 @@ This project aims to build machine learning models that use open-source CO₂ em
 - (Feature Elimination)<br>
 
 5. Modeling <br>
-- neural network
-- k fold cross validation
-- early stopping
-in progress<br>
+- neural network<br>
+- k fold cross validation<br>
+- early stopping<br>
+- hyperparameter optimization<br>
+__in progress__<br>
 <br>
 
 <br>

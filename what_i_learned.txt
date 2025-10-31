@@ -103,11 +103,65 @@ Keras:
     3.fit model:
     4.evaluate model:
 
+
 Evaluation:
     Train Loss:
         How well the model learned the training data
     Validation Loss: 
         How well the model can generalize to new, unseen data
-    
+    High training error and high test error -> Underfitting
+    Low training error and higher test error -> Overfitting
+
 
 Neural Network:
+    -layer:
+        input layer:
+        hidden layer:They extract patterns and relationships from the data.
+            activation function:Determines how the neuron output is transformed before passing to the next layer.
+                                Helps the model learn non-linear relationships.
+                sigmoid:(0, 1)
+                        Often used in binary classification.
+                tanh:(-1, 1)
+                ReLU:max(0,x)
+                        Most common activation in deep networks.
+        output layer:
+            Regression → 1 neuron (linear activation)
+            Binary classification → 1 neuron (sigmoid)
+            Multi-class classification → N neurons (softmax)
+    -hyperparameters:
+        number of epochs:
+        batch size: Number of samples processed before updating weights.
+            big -> Underfitting
+            small -> Overfitting
+    -loss function: Measures how far the model’s predictions are from the true values.
+                    The model tries to minimize this value.
+        Regression	-> MSE or MAE
+        Binary classification	-> Binary Cross-Entropy
+        Multiclass classification	-> Categorical Cross-Entropy
+        Segmentation	-> Dice Loss, Cross-Entropy
+        Sequence tasks	-> CTC Loss
+    -weight: Each neuron connection has a weight that scales input features.
+             During training, the optimizer updates these weights to minimize loss.
+        initializers:
+        regularizers:
+        constraints:
+    -optimizer: Algorithm that updates weights based on the loss function.
+        SGD (Stochastic Gradient Descent)
+        Adam : most widely used, adaptive learning rate.
+        RMSprop : good for recurrent networks.
+    -metrics: Used to measure performance of the model (not to train it).
+        Accuracy → classification
+        MAE / RMSE → regression
+        Precision, Recall, F1-score → classification quality
+    -early stopping: stop training automatically when validation loss stops improving.
+                    → Prevents overfitting and saves time.
+    -regularization: Methods to prevent overfitting by adding constraints.
+        L1 regularization (Lasso) → adds absolute value of weights.
+        L2 regularization (Ridge) → adds square of weights.
+        Penalizes large weights to encourage simpler models.
+    -memorization capacity: how much data the model can “memorize”.
+        Too high → overfitting
+    -dropout: Randomly turns off (sets to 0) some neurons during training.
+        Helps prevent overfitting by forcing the network to learn robust features.
+    -batch normalization: Normalizes activations in each mini-batch to stabilize learning.
+        Helps speed up training and reduce sensitivity to initialization.

@@ -54,3 +54,8 @@ columns:
        'Cloud_cloud_optical_depth', 'Cloud_surface_albedo',
        'Cloud_sensor_azimuth_angle', 'Cloud_sensor_zenith_angle',     
        'Cloud_solar_azimuth_angle', 'Cloud_solar_zenith_angle', 'emission']
+
+
+run the virtual workplace: 
+       ./.venv/Scripts/Activate.ps1
+

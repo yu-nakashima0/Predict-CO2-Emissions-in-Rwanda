@@ -16,6 +16,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
 from sklearn.model_selection import KFold
 from tensorflow.keras.callbacks import EarlyStopping
+import keras_tuner
+import optuna 
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -246,12 +248,21 @@ training neural network model
 return: trained model
 """
 def neural_network_model(X_train, y_train, X_val, y_val):
+    # value of hyperparameters can be optimized using optuna or keras_tuner
+    n_units_1 = trial.suggest_int('n_units_1', 32, 256, step=32)
+    n_units_2 = trial.suggest_int('n_units_2', 16, 128, step=16)
+    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2)
+    dropout_rate = trial.suggest_float('dropout', 0.0, 0.5, step=0.1)
+    batch_size = trial.suggest_categorical('batch_size', [16, 32, 64, 128])
+    
+    # define the model
     model = Sequential([
         Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
         Dense(32, activation='relu'),
         Dense(1, activation='linear')
     ])
 
+    # compile the model
     model.compile(
         optimizer=Adam(learning_rate=0.001),
         loss='mean_squared_error',
@@ -260,26 +271,32 @@ def neural_network_model(X_train, y_train, X_val, y_val):
 
     early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     
+    # train the model
     history = model.fit(
         X_train, y_train,
         validation_data=(X_val, y_val),
-        epochs=100,
+        epochs=10,
         batch_size=32,
         verbose=1,
         callbacks=[early_stop]
     )
 
+    # evaluate the model
     mse, mae = model.evaluate(X_val, y_val, verbose=0)
-    y_pred = model.predict(X_val)
     rmse = np.sqrt(mse)
-  
-    print(f"MAE  : {mae:.4f}") 
+
+    # make predictions
+    # return Numpy array
+    y_pred = model.predict(X_val) 
+
+    
+    print(f"MAE  : {mae:.7f}") 
     print(f"Validation RMSE: {rmse}")
 
-    return model,history, mse, mae, rmse
+    return model,history, mse, mae, rmse, y_pred
 
 
-#model,history, mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
+#model,history, mse, mae, rmse, y_pred = neural_network_model(X_train, y_train, X_val, y_val)
 
 
 """
@@ -378,7 +395,7 @@ def k_fold_cross_validation(df, k):
         X_train, X_val = X.iloc[train_index], X.iloc[val_index]
         y_train, y_val = y.iloc[train_index], y.iloc[val_index]
 
-        model, history , mse, mae, rmse = neural_network_model(X_train, y_train, X_val, y_val)
+        model, history , mse, mae, rmse, y_pred = neural_network_model(X_train, y_train, X_val, y_val)
         mse_list.append(mse)
         mae_list.append(mae)
         rmse_list.append(rmse)
@@ -387,11 +404,26 @@ def k_fold_cross_validation(df, k):
     avg_mae = np.mean(mae_list)
     avg_rmse = np.mean(rmse_list)
 
-    print(f"Average MSE across {k} folds: {avg_mse:.4f}")
-    print(f"Average MAE across {k} folds: {avg_mae:.4f}")
-    print(f"Average RMSE across {k} folds: {avg_rmse:.4f}")
+    print(f"Average MSE across {k} folds: {avg_mse:.7f}")
+    print(f"Average MAE across {k} folds: {avg_mae:.7f}")
+    print(f"Average RMSE across {k} folds: {avg_rmse:.7f}")
 
     return avg_mse, avg_mae, avg_rmse
 
 k_fold_cross_validation(df, 5)
 
+
+def objective(trial):
+    model, history, mse, mae, rmse, y_pred = neural_network_model(
+        trial, X_train, y_train, X_val, y_val
+    )
+    return rmse
+
+study = optuna.create_study(direction='minimize')
+study.optimize(objective, n_trials=20)
+
+print("Best trial:")
+trial = study.best_trial
+
+print(f"RMSE: {trial.value}")
+print("Best hyperparameters:", trial.params)
