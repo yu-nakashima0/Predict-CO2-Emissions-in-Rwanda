@@ -18,6 +18,8 @@ from sklearn.model_selection import KFold
 from tensorflow.keras.callbacks import EarlyStopping
 import keras_tuner
 import optuna 
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Input
 
 #read data
 df = pd.read_csv('./train.csv')
@@ -247,53 +249,49 @@ X_train, X_val, y_train, y_val = split_data(df, test_size=0.2)
 training neural network model
 return: trained model
 """
-def neural_network_model(X_train, y_train, X_val, y_val):
-    # value of hyperparameters can be optimized using optuna or keras_tuner
+def neural_network_model(X_train, y_train, X_val, y_val,trial):
+    # Hyperparameters from Optuna
     n_units_1 = trial.suggest_int('n_units_1', 32, 256, step=32)
     n_units_2 = trial.suggest_int('n_units_2', 16, 128, step=16)
-    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2)
+    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2, log=True)
     dropout_rate = trial.suggest_float('dropout', 0.0, 0.5, step=0.1)
     batch_size = trial.suggest_categorical('batch_size', [16, 32, 64, 128])
     
-    # define the model
+    # Build model using the suggested hyperparameters
     model = Sequential([
-        Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
-        Dense(32, activation='relu'),
+        Input(shape=(X_train.shape[1],)),  
+        Dense(n_units_1, activation='relu'),
+        Dropout(dropout_rate),
+        Dense(n_units_2, activation='relu'),
+        Dropout(dropout_rate),
         Dense(1, activation='linear')
     ])
 
-    # compile the model
+    # Compile model
     model.compile(
-        optimizer=Adam(learning_rate=0.001),
+        optimizer=Adam(learning_rate=learning_rate),
         loss='mean_squared_error',
         metrics=['mae']
     )
 
     early_stop = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
     
-    # train the model
+    # Train model
     history = model.fit(
         X_train, y_train,
         validation_data=(X_val, y_val),
         epochs=10,
-        batch_size=32,
-        verbose=1,
+        batch_size=batch_size,
+        verbose=0,
         callbacks=[early_stop]
     )
 
-    # evaluate the model
+    # Evaluate
     mse, mae = model.evaluate(X_val, y_val, verbose=0)
     rmse = np.sqrt(mse)
-
-    # make predictions
-    # return Numpy array
-    y_pred = model.predict(X_val) 
-
+    y_pred = model.predict(X_val)
     
-    print(f"MAE  : {mae:.7f}") 
-    print(f"Validation RMSE: {rmse}")
-
-    return model,history, mse, mae, rmse, y_pred
+    return model, history, mse, mae, rmse, y_pred
 
 
 #model,history, mse, mae, rmse, y_pred = neural_network_model(X_train, y_train, X_val, y_val)
@@ -383,11 +381,11 @@ def visualize_training_history_plotly(history, log_scale=False, start_epoch=0):
 k-fold cross validation
 return: average mse, mae, rmse across folds
 """
-def k_fold_cross_validation(df, k):
+def k_fold_cross_validation(df, k, trial):
     y = df['emission'].astype('float32')
     X = df.drop(['ID_LAT_LON_YEAR_WEEK','emission'], axis=1)
     X = pd.get_dummies(X).astype('float32')
-
+    
     kf = KFold(n_splits=k, shuffle=True, random_state=42)
     mse_list, mae_list, rmse_list = [], [], []
 
@@ -395,7 +393,7 @@ def k_fold_cross_validation(df, k):
         X_train, X_val = X.iloc[train_index], X.iloc[val_index]
         y_train, y_val = y.iloc[train_index], y.iloc[val_index]
 
-        model, history , mse, mae, rmse, y_pred = neural_network_model(X_train, y_train, X_val, y_val)
+        model, history , mse, mae, rmse, y_pred = neural_network_model(X_train, y_train, X_val, y_val, trial)
         mse_list.append(mse)
         mae_list.append(mae)
         rmse_list.append(rmse)
@@ -410,14 +408,14 @@ def k_fold_cross_validation(df, k):
 
     return avg_mse, avg_mae, avg_rmse
 
-k_fold_cross_validation(df, 5)
+
 
 
 def objective(trial):
-    model, history, mse, mae, rmse, y_pred = neural_network_model(
-        trial, X_train, y_train, X_val, y_val
+    avg_mse, avg_mae, avg_rmse = k_fold_cross_validation(
+        df, 5, trial
     )
-    return rmse
+    return avg_rmse
 
 study = optuna.create_study(direction='minimize')
 study.optimize(objective, n_trials=20)

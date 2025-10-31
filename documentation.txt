@@ -32,8 +32,28 @@
         Average RMSE across 5 folds: 0.0454
 
 6. Hyperparameter-Tuning
+    baysian optimization (optuna)
+    *erstmal in der Funktion von neural network model geschrieben -> error    
+    Trial 0 finished with value: 0.045440666901038894 and parameters: 
+        {'n_units_1': 32, 'n_units_2': 80, 'learning_rate': 0.00036591518911350927, 'dropout': 0.4, 'batch_size': 16}. 
+        Best is trial 0 with value: 0.045440666901038894.
+    Trial 1 finished with value: 0.04544217841263955 and parameters: 
+        {'n_units_1': 32, 'n_units_2': 48, 'learning_rate': 0.0073020190746106994, 'dropout': 0.5, 'batch_size': 128}. 
+        Best is trial 0 with value: 0.045440666901038894.                                                              -> trial übergeben
+    Trial 2 finished with value: 0.04545496633096559 and parameters: 
+        {'n_units_1': 192, 'n_units_2': 64, 'learning_rate': 0.002207056795253314, 'dropout': 0.4, 'batch_size': 128}. 
+        Best is trial 0 with value: 0.045440666901038894.
+    Trial 3 finished with value: 0.04544153959460335 and parameters: 
+        {'n_units_1': 192, 'n_units_2': 48, 'learning_rate': 0.0010745527120296062, 'dropout': 0.1, 'batch_size': 128}. 
+        Best is trial 0 with value: 0.045440666901038894.
+    Trial 4 finished with value: 0.04544227965989326 and parameters: 
+        {'n_units_1': 96, 'n_units_2': 96, 'learning_rate': 0.00037222918937898256, 'dropout': 0.5, 'batch_size': 64}. 
+        Best is trial 0 with value: 0.045440666901038894.
+    Trial 5 finished with value: 0.04544068701302716 and parameters: 
+        {'n_units_1': 128, 'n_units_2': 96, 'learning_rate': 0.00038934497574815444, 'dropout': 0.1, 'batch_size': 32}. 
+        Best is trial 0 with value: 0.045440666901038894.
 
-
+        
 7. Pipeline
 
 
