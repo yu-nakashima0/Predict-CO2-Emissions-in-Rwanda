@@ -125,10 +125,10 @@ This project aims to build machine learning models that use open-source CO₂ em
 SO₂ mainly comes from fossil fuel combustion (coal, oil), volcanic eruptions, and industrial processes like metal smelting.<br>
 It contributes to acid rain and respiratory problems.<br>
 - Main sources:<br>
-Coal- and oil-fired power plants<br>
-Metal smelters and refineries<br>
-Volcanic emissions<br>
-Ship exhaust (bunker fuel)<br>
+    - Coal- and oil-fired power plants<br>
+    - Metal smelters and refineries<br>
+    - Volcanic emissions<br>
+    - Ship exhaust (bunker fuel)<br>
 
 -**Nitrogen Dioxide (NO₂):**<br>
 NO₂ is primarily produced from high-temperature combustion, such as in vehicle engines, power plants, and industrial boilers.<br>
@@ -205,6 +205,9 @@ Cloud data are not pollutants but influence satellite observations through radia
 - optimizer<br>
 - early stopping<br>
 - hyperparameter optimization<br>
+<br>
+<br>
+
 _in progress_<br>
 <br>
 
