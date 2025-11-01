@@ -106,9 +106,95 @@ def visualize_boxplots(df, feature_groups, unique_key):
         ax.set_title(c)
         st.pyplot(fig)
 
-visualize_boxplots(df, feature_groups, "before_processing_boxplots")
+#visualize_boxplots(df, feature_groups, "before_processing_boxplots")
 
     
+
+"""
+create new 20 features
+return : new dataframe with additional features
+"""
+def make_emission_features(df):
+    features = pd.DataFrame(index=df.index)
+
+    #SO2 
+    features['SO2_corrected_column'] = np.nan_to_num(
+        df['SulphurDioxide_SO2_slant_column_number_density'] /
+        df['SulphurDioxide_SO2_column_number_density_amf']
+    )
+
+    features['SO2_15km_ratio'] = np.nan_to_num(
+        df['SulphurDioxide_SO2_column_number_density_15km'] /
+        (features['SO2_corrected_column'] + 1e-10)
+    )
+
+    #CO 
+    features['CO_column_density'] = df['CarbonMonoxide_CO_column_number_density']
+
+    features['CO_H2O_ratio'] = np.nan_to_num(
+        df['CarbonMonoxide_CO_column_number_density'] /
+        (df['CarbonMonoxide_H2O_column_number_density'] + 1e-10)
+    )
+
+    #NO2
+    features['NO2_tropospheric_fraction'] = np.nan_to_num(
+        df['NitrogenDioxide_tropospheric_NO2_column_number_density'] /
+        (df['NitrogenDioxide_NO2_column_number_density'] + 1e-10)
+    )
+
+    features['NO2_absorbing_aerosol_index'] = df['NitrogenDioxide_absorbing_aerosol_index']
+
+    #HCHO
+    features['HCHO_tropospheric_column'] = df['Formaldehyde_tropospheric_HCHO_column_number_density']
+
+    features['HCHO_NO2_ratio'] = np.nan_to_num(
+        df['Formaldehyde_tropospheric_HCHO_column_number_density'] /
+        (df['NitrogenDioxide_tropospheric_NO2_column_number_density'] + 1e-10)
+    )
+
+    #O3
+    features['O3_column_density'] = df['Ozone_O3_column_number_density']
+    features['O3_effective_temperature'] = df['Ozone_O3_effective_temperature']
+
+    #Aerosol (UV Layer + Index)
+    features['Aerosol_optical_depth'] = df['UvAerosolLayerHeight_aerosol_optical_depth']
+    features['Aerosol_height'] = df['UvAerosolLayerHeight_aerosol_height']
+    features['Aerosol_absorbing_index'] = df['UvAerosolIndex_absorbing_aerosol_index']
+
+    #Cloud
+    features['Cloud_fraction'] = df['Cloud_cloud_fraction']
+    features['Cloud_top_height'] = df['Cloud_cloud_top_height']
+    features['Cloud_optical_depth'] = df['Cloud_cloud_optical_depth']
+    features['Surface_albedo'] = df['Cloud_surface_albedo']
+
+    #Observation Geometry
+    sensor_zenith_cols = [c for c in df.columns if 'sensor_zenith_angle' in c]
+    solar_zenith_cols = [c for c in df.columns if 'solar_zenith_angle' in c]
+    features['View_angle_mean'] = df[sensor_zenith_cols].mean(axis=1)
+    features['Solar_angle_mean'] = df[solar_zenith_cols].mean(axis=1)
+
+    #Interaction term
+    features['Aerosol_cloud_interaction_index'] = (
+        df['UvAerosolLayerHeight_aerosol_optical_depth'] * df['Cloud_cloud_fraction']
+    )
+
+    features['emission'] = df['emission']
+
+    expected_features = [
+        'SO2_corrected_column', 'SO2_15km_ratio', 'CO_column_density', 'CO_H2O_ratio',
+        'NO2_tropospheric_fraction', 'NO2_absorbing_aerosol_index',
+        'HCHO_tropospheric_column', 'HCHO_NO2_ratio',
+        'O3_column_density', 'O3_effective_temperature',
+        'Aerosol_optical_depth', 'Aerosol_height', 'Aerosol_absorbing_index',
+        'Cloud_fraction', 'Cloud_top_height', 'Cloud_optical_depth', 'Surface_albedo',
+        'View_angle_mean', 'Solar_angle_mean', 'Aerosol_cloud_interaction_index','emission'
+    ]
+
+    return features[expected_features]
+
+df = make_emission_features(df)
+
+
 """
 Handling Skewed Distribution
 return: dataframe with transformed data
@@ -136,11 +222,21 @@ def normalize_data(df, feature_groups):
             df[col] = (df[col] - min_val) / (max_val - min_val)
     return df
 
-df = normalize_data(df, feature_groups)
+#df = normalize_data(df, feature_groups)
 
+
+def normalize_data(df):
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    for col in numeric_cols:
+        min_val = df[col].min()
+        max_val = df[col].max()
+        df[col] = (df[col] - min_val) / (max_val - min_val)
+    return df
+
+df = normalize_data(df)
 
 #check data after data processing
-visualize_boxplots(df, feature_groups, "after_processing_boxplots") 
+#visualize_boxplots(df, feature_groups, "after_processing_boxplots") 
 
 
 """
@@ -176,7 +272,7 @@ def visualize_additional_insights(df, feature_groups):
     mi_series.plot(kind='bar', ax=ax)
     st.pyplot(fig)
 
-visualize_additional_insights(df, feature_groups)
+#visualize_additional_insights(df, feature_groups)
 
 
 def visualize_additional_insights_with_plotly(df, feature_groups):
@@ -228,7 +324,7 @@ def visualize_additional_insights_with_plotly(df, feature_groups):
     st.plotly_chart(fig_mi, use_container_width=True)
 
 
-visualize_additional_insights_with_plotly(df, feature_groups)
+#visualize_additional_insights_with_plotly(df, feature_groups)
 
 
 """
@@ -237,7 +333,7 @@ return : X_train, y_train, X_val, y_val
 """
 def split_data(df, test_size=0.2):
     y = df['emission'].astype('float32')
-    X = df.drop(['ID_LAT_LON_YEAR_WEEK','emission'], axis=1)
+    X = df.drop(['emission'], axis=1)
     X = pd.get_dummies(X).astype('float32')
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=test_size, random_state=42)
     
@@ -253,7 +349,7 @@ def neural_network_model(X_train, y_train, X_val, y_val,trial):
     # Hyperparameters from Optuna
     n_units_1 = trial.suggest_int('n_units_1', 32, 256, step=32)
     n_units_2 = trial.suggest_int('n_units_2', 16, 128, step=16)
-    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2, log=True)
+    learning_rate = trial.suggest_loguniform('learning_rate', 1e-4, 1e-2)
     dropout_rate = trial.suggest_float('dropout', 0.0, 0.5, step=0.1)
     batch_size = trial.suggest_categorical('batch_size', [16, 32, 64, 128])
     
@@ -383,7 +479,7 @@ return: average mse, mae, rmse across folds
 """
 def k_fold_cross_validation(df, k, trial):
     y = df['emission'].astype('float32')
-    X = df.drop(['ID_LAT_LON_YEAR_WEEK','emission'], axis=1)
+    X = df.drop(['emission'], axis=1)
     X = pd.get_dummies(X).astype('float32')
     
     kf = KFold(n_splits=k, shuffle=True, random_state=42)

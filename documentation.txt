@@ -18,7 +18,8 @@
 - mutual information
 
 4. Feature engineering
--
+- almost 90 features -> too much
+                     -> reduce features
 -
 
 5. Modeling

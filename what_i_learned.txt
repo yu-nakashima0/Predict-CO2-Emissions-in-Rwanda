@@ -87,6 +87,11 @@ Feature Creation:
         Formed by combining existing features.
     Binning: 
         Convert continuous variables into categories
+    Polynomial or interaction features (PolynomialFeatures)
+    Time-based features (lag, rolling mean, trends)
+    Geographic features (distance, region clusters from lat/lon)
+    Feature selection using SelectKBest, RFECV, or SHAP values
+
 
 Feature Extraction:
     PCA:
@@ -165,3 +170,27 @@ Neural Network:
         Helps prevent overfitting by forcing the network to learn robust features.
     -batch normalization: Normalizes activations in each mini-batch to stabilize learning.
         Helps speed up training and reduce sensitivity to initialization.
+
+
+Make Preprocessing Reproducible with Pipelines:
+    Pipeline / ColumnTransformer from scikit-learn
+    interpolate, normalize, PowerTransformer
+    FunctionTransformer / TransformerMixin
+
+
+Model Benchmarking & Comparison:
+    Benchmark neural nets vs.:
+        RandomForest / XGBoost / LightGBM
+        Linear or ElasticNet baseline
+
+
+Better Evaluation & Interpretability
+    Residual plots and error histograms
+    SHAP values for feature importance
+    Learning curves and validation curves
+    Cross-validation with confidence intervals
+
+
+MLOps & Reproducibility
+    Use MLflow to track experiments and model versions
+    Build Streamlit apps for stakeholders

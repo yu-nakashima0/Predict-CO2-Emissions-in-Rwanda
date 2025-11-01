@@ -120,14 +120,73 @@ This project aims to build machine learning models that use open-source CO₂ em
 <br>
 
 
+## 🌱 Understanding the dataset:
+-**Sulphur Dioxide(SO₂):**<br>
+SO₂ mainly comes from fossil fuel combustion (coal, oil), volcanic eruptions, and industrial processes like metal smelting.<br>
+It contributes to acid rain and respiratory problems.<br>
+- Main sources:<br>
+Coal- and oil-fired power plants<br>
+Metal smelters and refineries<br>
+Volcanic emissions<br>
+Ship exhaust (bunker fuel)<br>
+
+-**Nitrogen Dioxide (NO₂):**<br>
+NO₂ is primarily produced from high-temperature combustion, such as in vehicle engines, power plants, and industrial boilers.<br>
+It contributes to urban smog and reacts with sunlight to form ground-level ozone.<br>
+- Main sources:<br>
+    - Vehicle exhaust<br>
+    - Power generation (especially fossil fuels)<br>
+    - Industrial boilers and furnaces<br>
+    - Aircraft engines<br>
+
+-**Carbon Monoxide (CO):**<br>
+CO is produced by incomplete combustion — when carbon-based fuels burn with insufficient oxygen.<br>
+It’s a colorless, odorless toxic gas mainly from traffic and fires.<br>
+- Main sources:<br>
+    - Vehicle exhaust (especially older engines)<br>
+    - Domestic heating and cooking (stoves, fireplaces)<br>
+    - Biomass burning and wildfires<br>
+    - Industrial combustion<br>
+
+-**Formaldehyde (HCHO):**<br>
+Formaldehyde (HCHO) is both directly emitted and formed through photochemical oxidation of volatile organic compounds (VOCs).<br>
+It’s a key intermediate in ozone and smog formation.<br>
+- Main sources:<br>
+    - Vehicle and industrial VOC emissions<br>
+    - Biomass burning and forest fires<br>
+    - Chemical manufacturing (resins, paints, glues)<br>
+    - Atmospheric oxidation of VOCs<br>
+
+-**Ozone (O₃):**<br>
+There are two types of ozone:<br>
+Stratospheric ozone (“good ozone”) protects from UV radiation.<br>
+Tropospheric ozone (“bad ozone”) is formed when NO₂ and VOCs react under sunlight, causing smog and respiratory problems.<br>
+- Main sources:<br>
+    - Secondary formation from NO₂ and VOCs<br>
+    - Sunlight-driven reactions in polluted cities<br>
+
+-**Aerosols & UvAerosolIndex:**<br>
+Aerosols are tiny particles suspended in the air, coming from both natural and anthropogenic sources.<br>
+They affect climate (by scattering/absorbing sunlight) and air quality.<br>
+- Main sources:<br>
+    - Dust storms and desert emissions<br>
+    - Volcanic ash<br>
+    - Biomass burning and wildfires<br>
+    - Industrial and vehicle emissions<br>
+
+-**Cloud:**<br>
+Cloud data are not pollutants but influence satellite observations through radiative transfer (reflection, absorption).<br>
+
+<br>
+
 ## ✏️ methods: 
 1. Data Collection<br>
 
 2. Data Exploration/Processing<br>
 -> missing values : filled with interpolate(linear)<br>
--> outlier Detection : IsolationForest<br>
+-> outlier detection : IsolationForest<br>
 -> data normalization<br>
--> Handling Skewed Distribution<br>
+-> handling skewed distribution<br>
 
 3. Data Visualization(streamlit/plotly)<br>
 - Boxplot <br>
@@ -137,15 +196,16 @@ This project aims to build machine learning models that use open-source CO₂ em
 - interactive<br>
 
 4. Feature Engineering<br>
-- (Feature Creation)<br>
-- (Feature Elimination)<br>
+- Feature Creation<br>
+- Feature Elimination<br>
 
 5. Modeling <br>
 - neural network<br>
 - k fold cross validation<br>
+- optimizer<br>
 - early stopping<br>
 - hyperparameter optimization<br>
-__in progress__<br>
+_in progress_<br>
 <br>
 
 <br>
